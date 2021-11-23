@@ -905,7 +905,6 @@ const wincTheme = {
 
 // Add label
 const DatalistWithLabels = Data.map((avg) => ({
-  id: avg.ID,
   assignment: avg.Opdracht,
   difficultyRating: avg.Moeilijk,
   enjoymentRating: avg.Leuk,
@@ -915,74 +914,14 @@ const DatalistWithLabels = Data.map((avg) => ({
 }));
 
 //alle gemiddeldes leuk.
+const sum = (prev, cur) => ({
+  enjoymentRating: prev.enjoymentRating + cur.enjoymentRating,
+});
 
-const getAssignmentName = (assignmentID) => {
-  const name = DatalistWithLabels.find(
-    (assignment) => assignment.id === assignmentID
-  );
-  return name.assignment;
-};
+const avg =
+  DatalistWithLabels.reduce(sum).enjoymentRating / DatalistWithLabels.length;
+console.log(avg);
 
-const getGrades = (grades) => {
-  const difficultyGrades = [];
-  const reviewGrades = [];
-  grades.forEach((item) => {
-    difficultyGrades.push(item.difficultyRating);
-    reviewGrades.push(item.enjoymentRating);
-  });
-  return { difficultyGrades, reviewGrades };
-};
-
-const getDataFromSingleAssignment = (assignmentID) => {
-  const single = DatalistWithLabels.filter((item) => {
-    return item.id === assignmentID;
-  });
-  return single;
-};
-
-const setCombinedAverage = (data) => {
-  const combinedAvgGrades = [];
-  try {
-    const averageDifficultyGrade = this.getAverage(data.difficultyGrades);
-    const averageReviewGrade = this.getAverage(data.reviewGrades);
-    combinedAvgGrades.push(averageDifficultyGrade, averageReviewGrade);
-  } finally {
-    return combinedAvgGrades;
-  }
-};
-
-const getAverageFromAllAssignments = () => {
-  //Wanted result: {assignmentName: "W1D1-1", avgDifficultyGrade: 4, AvgReviewGrade: 1}
-  const names = [];
-  const goodData = DatalistWithLabels.map((item) => {
-    const name = getAssignmentName(item.id);
-    if (!names.includes(name)) {
-      names.push(name);
-    }
-    const singleAssignment = getDataFromSingleAssignment(item.id);
-    let grades;
-    if (singleAssignment.length > 0) {
-      grades = getGrades(singleAssignment);
-    }
-    const combinedAvgGrades = setCombinedAverage(grades);
-    return combinedAvgGrades;
-  });
-
-  const filteredData = goodData.filter((item) => {
-    return item.length > 0 && item !== undefined;
-  });
-
-  const averageData = filteredData.map((data, index) => {
-    return {
-      assignmentName: names[index],
-      difficultyGrade: data[0],
-      reviewGrade: data[1],
-    };
-  });
-  return averageData;
-};
-
-console.log(getAverageFromAllAssignments());
 const Chart = () => (
   <>
     <VictoryChart domainPadding={15} theme={wincTheme}>

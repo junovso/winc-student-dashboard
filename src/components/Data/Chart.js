@@ -914,13 +914,35 @@ const DatalistWithLabels = Data.map((avg) => ({
 }));
 
 //alle gemiddeldes leuk.
-const sum = (prev, cur) => ({
-  enjoymentRating: prev.enjoymentRating + cur.enjoymentRating,
+// remove dublicates of the assignments
+const assignments = [
+  ...new Set(
+    DatalistWithLabels.map((item) => {
+      return item.assignment;
+    })
+  ),
+];
+
+// calculate the average
+const averages = assignments.map((assignment) => {
+  // group the assignments by the assignment name
+  const assignmentsByCourse = DatalistWithLabels.filter(
+    (item) => item.assignment === assignment
+  );
+  // get the grades per course
+  const courseGrades = assignmentsByCourse.map((value) => {
+    return value.difficultyRating;
+  });
+  // calculate the total per course
+  const reducer = (previousValue, currentValue) => previousValue + currentValue;
+  // return object with the average grade and the assignment name
+  return {
+    x: assignment,
+    y: courseGrades.reduce(reducer) / courseGrades.length,
+  };
 });
 
-const avg =
-  DatalistWithLabels.reduce(sum).enjoymentRating / DatalistWithLabels.length;
-console.log(avg);
+console.log(averages);
 
 const Chart = () => (
   <>
@@ -932,16 +954,16 @@ const Chart = () => (
           x="assignment"
           y="difficultyRating"
           tickValues={[1, 2, 3, 4, 5]}
-          tickFormat={DatalistWithLabels.map((avg) => avg.difficultyRating)}
+          tickFormat={averages.map((avg) => avg.y)}
         />
-        <VictoryBar
+        {/* <VictoryBar
           labelComponent={<VictoryTooltip />}
           data={DatalistWithLabels}
           x="assignment"
           y="enjoymentRating"
           tickValues={[1, 2, 3, 4, 5]}
-          tickFormat={DatalistWithLabels.map((avg) => avg.enjoymentRating)}
-        />
+          tickFormat={averages.map((avg) => avg.y)}
+        /> */}
       </VictoryGroup>
       <VictoryAxis
         // tickValues specifies both the number of ticks and where

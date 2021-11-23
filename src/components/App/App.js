@@ -1,17 +1,17 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Main from "../Layout/Main";
+import Home from "../Layout/Home";
 import Sidenav from "../Layout/Sidenav";
-import Sheets from "../Layout/Sheets";
+import StudentProfile from "../StudentProfile";
 
 function App() {
   return (
     <div className="App">
       <Sidenav />
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/sheets" element={<Sheets />} />
+        <Route path="/" element={<Home />} />
+        <Route path=":studentName" element={<StudentProfile />} />
       </Routes>
     </div>
   );

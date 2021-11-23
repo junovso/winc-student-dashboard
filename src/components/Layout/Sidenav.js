@@ -6,16 +6,16 @@ const Sidenav = () => {
     <div className="sidenav">
       <Link to="/"> Home </Link>
       <hr />
-      <a href="#clients">Aranka</a>
-      <a href="#services">Evelyn</a>
-      <a href="#contact">Floris</a>
-      <a href="#contact">Hector</a>
-      <a href="#contact">Martina</a>
-      <a href="#contact">Maurits</a>
-      <a href="#contact">Rahima</a>
-      <a href="#contact">Sandra</a>
-      <a href="#contact">Wietske</a>
-      <a href="#contact">Storm</a>
+      <Link to="/Aranka"> Aranka </Link>
+      <Link to="/Evelyn"> Evelyn </Link>
+      <Link to="/Floris"> Floris </Link>
+      <Link to="/Hector"> Hector </Link>
+      <Link to="/Martina"> Martina </Link>
+      <Link to="/Maurits"> Maurits </Link>
+      <Link to="/Rahima"> Rahima </Link>
+      <Link to="/Sandra"> Sandra </Link>
+      <Link to="/Wietske"> Wietske </Link>
+      <Link to="/Storm"> Storm </Link>
     </div>
   );
 };

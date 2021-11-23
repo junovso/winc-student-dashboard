@@ -7,6 +7,7 @@ import {
   VictoryTooltip,
   VictoryLine,
   VictoryGroup,
+  VictoryLabel,
 } from "victory";
 
 const grayscale = {
@@ -914,7 +915,7 @@ const DatalistWithLabels = Data.map((avg) => ({
 }));
 
 //alle gemiddeldes leuk.
-// remove dublicates of the assignments
+// remove duplicates of the assignments
 const assignments = [
   ...new Set(
     DatalistWithLabels.map((item) => {
@@ -924,7 +925,7 @@ const assignments = [
 ];
 
 // calculate the average
-const averages = assignments.map((assignment) => {
+const averagesDifficulty = assignments.map((assignment) => {
   // group the assignments by the assignment name
   const assignmentsByCourse = DatalistWithLabels.filter(
     (item) => item.assignment === assignment
@@ -942,28 +943,59 @@ const averages = assignments.map((assignment) => {
   };
 });
 
-console.log(averages);
+const averagesEnjoyment = assignments.map((assignment) => {
+  // group the assignments by the assignment name
+  const assignmentsByCourse = DatalistWithLabels.filter(
+    (item) => item.assignment === assignment
+  );
+  // get the grades per course
+  console.log("one log per assignment ");
+  const courseGrades = assignmentsByCourse.map((value) => {
+    return value.enjoymentRating;
+  });
+  // calculate the total per course
+  const reducer = (previousValue, currentValue) => previousValue + currentValue;
+  // return object with the average grade and the assignment name
+  return {
+    x: assignment,
+    y: courseGrades.reduce(reducer) / courseGrades.length,
+  };
+});
+
+const difficultyWithLabels = averagesDifficulty.map((avg) => ({
+  x: avg.x,
+  y: avg.y,
+  label: `Opdracht ${avg.x}, difficultyRating: ${avg.y.toFixed(1)}`,
+}));
+
+const enjoymentWithLabels = averagesEnjoyment.map((avg) => ({
+  x: avg.x,
+  y: avg.y,
+  label: `Opdracht ${avg.x}, enjoymentRating: ${avg.y.toFixed(1)}`,
+}));
 
 const Chart = () => (
   <>
     <VictoryChart domainPadding={15} theme={wincTheme}>
-      <VictoryGroup offset={20}>
+      <VictoryGroup offset={4}>
         <VictoryBar
           labelComponent={<VictoryTooltip />}
-          data={DatalistWithLabels}
-          x="assignment"
-          y="difficultyRating"
+          data={difficultyWithLabels}
+          x="x"
+          y="y"
           tickValues={[1, 2, 3, 4, 5]}
-          tickFormat={averages.map((avg) => avg.y)}
+          tickFormat={difficultyWithLabels.map((avg) => avg.y)}
+          labels={difficultyWithLabels.map((avg) => avg.label)}
         />
-        {/* <VictoryBar
+        <VictoryBar
           labelComponent={<VictoryTooltip />}
-          data={DatalistWithLabels}
-          x="assignment"
-          y="enjoymentRating"
+          data={enjoymentWithLabels}
+          x="x"
+          y="y"
           tickValues={[1, 2, 3, 4, 5]}
-          tickFormat={averages.map((avg) => avg.y)}
-        /> */}
+          tickFormat={enjoymentWithLabels.map((avg) => avg.y)}
+          labels={enjoymentWithLabels.map((avg) => avg.label)}
+        />
       </VictoryGroup>
       <VictoryAxis
         // tickValues specifies both the number of ticks and where
@@ -973,33 +1005,22 @@ const Chart = () => (
       />
       <VictoryAxis dependentAxis />
     </VictoryChart>
-    {/* <VictoryChart domainPadding={15} theme={wincTheme}>
+    <VictoryChart theme={wincTheme}>
       <VictoryLine
         style={{
-          data: { stroke: "#c43a31" },
+          data: { stroke: "#fff" },
           parent: { border: "1px solid #ccc" },
         }}
-        data={DatalistWithLabels.map((avg) => avg.difficultyRating)}
-        x="assignment"
-        y="difficultyRating"
+        data={averagesDifficulty}
       />
       <VictoryLine
         style={{
-          data: { stroke: "#ff00ff" },
+          data: { stroke: "#1A7286" },
           parent: { border: "1px solid #ccc" },
         }}
-        data={DatalistWithLabels.map((avg) => avg.enjoymentRating)}
-        x="assignment"
-        y="enjoymentRating"
+        data={averagesEnjoyment}
       />
-      <VictoryAxis
-        // tickValues specifies both the number of ticks and where
-        // they are placed on the axis
-        tickValues={[1, 2, 3, 4, 5]}
-        tickFormat={DatalistWithLabels.map((avg) => avg.assignment)}
-      />
-      <VictoryAxis dependentAxis />
-    </VictoryChart> */}
+    </VictoryChart>
   </>
 );
 export default Chart;

@@ -1,12 +1,14 @@
 import React from "react";
 import Footer from "./Footer";
+import Chart from "../Data/Chart";
 
-const Main = () => {
+const Home = () => {
   return (
     <div className="main">
       <p className="main-header-span">Winc Student Dashboard - Home</p>
+      <Chart />
       <Footer />
     </div>
   );
 };
-export default Main;
+export default Home;

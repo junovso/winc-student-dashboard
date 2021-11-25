@@ -6,8 +6,10 @@ function StudentProfile() {
   const { studentName } = useParams();
 
   return (
-    <div className="main">
-      <h3>Student : {studentName}</h3>
+    <div className="content">
+      <div className="header-wrapper">
+        <h1 className="header-text">Student : {studentName}</h1>
+      </div>
       <StudentChart studentToFilter={studentName} />
     </div>
   );

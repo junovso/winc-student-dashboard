@@ -431,7 +431,7 @@ function StudentChart({ studentToFilter }) {
       return {
         x: course.assignment,
         y: course[rating],
-        label: `Opdracht ${course.assignment}, ${rating}Rating: ${course[
+        label: `Opdracht ${course.assignment}, ${rating}: ${course[
           rating
         ].toFixed(1)}`,
       };
